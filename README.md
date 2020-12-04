@@ -1,71 +1,116 @@
-# vue-hackernews-2.0
+# VueJS + Vuex + SSR + HMR boilerplate
 
-HackerNews clone built with Vue 2.0 + vue-router + vuex, with server-side rendering.
+Demo: https://vue-ssr-hmr.herokuapp.com/
 
-<p align="center">
-  <a href="https://vue-hn.herokuapp.com" target="_blank">
-    <img src="https://cloud.githubusercontent.com/assets/499550/17546273/5aabc5fc-5eaf-11e6-8d6a-ad00937e8bd6.png" width="700px">
-    <br>
-    Live Demo
-  </a>
-</p>
+Article: https://medium.com/js-dojo/how-i-made-it-easy-to-develop-on-vue-js-with-server-side-rendering-fdeebdd7e8d8
 
-## Features
+I decided develop my new application, using VueJS. 
+I was looking for convenient examples of VueJS, Vuex, which using SSR and hot reloading, 
+but I didn't find them. 
 
-> Note: in practice, it is unnecessary to code-split for an app of this size (where each async chunk is only a few kilobytes), nor is it optimal to extract an extra CSS file (which is only 1kb) -- they are used simply because this is a demo app showcasing all the supported features.
+So, I decided to create this boilerplate. I hope that it will be helpful for somebody.
 
-- Server Side Rendering
-  - Vue + vue-router + vuex working together
-  - Server-side data pre-fetching
-  - Client-side state & DOM hydration
-  - Automatically inlines CSS used by rendered components only
-  - Preload / prefetch resource hints
-  - Route-level code splitting
-- Progressive Web App
-  - App manifest
-  - Service worker
-  - 100/100 Lighthouse score
-- Single-file Vue Components
-  - Hot-reload in development
-  - CSS extraction for production
-- Animation
-  - Effects when switching route views
-  - Real-time list updates with FLIP Animation
+It includes:
 
-## A Note on Performance
+### Server-side rendering (SSR)
 
-This is a demo primarily aimed at explaining how to build a server-side rendered Vue app, as a companion to our SSR documentation. There are a few things we probably won't do in production if we were optimizing for performance, for example:
+It helps to user to receive content faster. Also, it improves SEO.
 
-- This demo uses the Firebase-based HN API to showcase real-time updates, but the Firebase API also comes with a larger bundle, more JavaScript to parse on the client, and doesn't offer an efficient way to batch-fetch pages of items, so it impacts performance quite a bit on a cold start or cache miss.
+### Single page application
 
-- In practice, it is unnecessary to code-split for an app of this size (where each async chunk is only a few kilobytes so the extra request isn't really worth it), nor is it optimal to extract an extra CSS file (which is only 1kb).
+Routing without full reload pages.
 
-It is therefore not recommended to use this app as a reference for Vue SSR performance - instead, do your own benchmarking, and make sure to measure and optimize based on your actual app constraints.
+### Vuex state management
 
-## Architecture Overview
+State management pattern. Represents centralized store for all the components in an application. 
 
-<img width="973" alt="screen shot 2016-08-11 at 6 06 57 pm" src="https://cloud.githubusercontent.com/assets/499550/17607895/786a415a-5fee-11e6-9c11-45a2cfdf085c.png">
+Also, it contains example of fetch data from API and store it to Vuex modules.
 
-**A detailed Vue SSR guide can be found [here](https://ssr.vuejs.org).**
+More: https://vuex.vuejs.org
 
-## Build Setup
+### CSS modules
 
-**Requires Node.js 7+**
-
-``` bash
-# install dependencies
-npm install # or yarn
-
-# serve in dev mode, with hot reload at localhost:8080
-npm run dev
-
-# build for production
-npm run build
-
-# serve in production mode
-npm start
+System for modularizing and composing CSS. You can use it as:
+```html
+<style module>
+.red {
+  color: red;
+}
+.bold {
+  font-weight: bold;
+}
+</style>
 ```
 
-## License
+```html
+<template>
+  <p :class="$style.red">
+    This should be red
+  </p>
+</template>
+```
 
-MIT
+And result class will be shown like `.red_<hash>`.
+
+More: https://vue-loader.vuejs.org/guide/css-modules.html#usage
+
+### Hot reloading, including server-side
+
+Technique, which improves your development performance significantly. 
+When you change your code or css you will see result immediately in browser. 
+If you use SSR, probably, usually you have a problem, when you reload page, 
+because your server-side code doesn't have hot-reloading. 
+But in this boilerplate similar problem resolved. 
+When you change code, server-side code will recompile too. 
+And if you reload page, you will see changes on server side.
+
+
+### Code-splitting
+
+In this boilerplate you doesn't have one huge js bundle, 
+but you have one main bundle a few small bundles for each page.
+
+It allows not to load unnecessary code for current page.
+
+### Easy and customizable build for local development and production
+
+Boilerplate has a base webpack config and different configs for client and server.
+Production build has minified css and js bundles with hash in name for caching static in browser.
+
+Also, there is a convenient html template where you can put your common html code.
+
+### Code quality
+
+Boilerplate has ESLint with Airbnb VueJS config and Prettier for awesome code formatting.
+
+
+## How to use it
+
+To start environment for local development, use:
+```
+yarn run dev
+# or solution for linux
+sudo yarn run build && yarn run dev
+```
+**If you run it the first time, you'll get error, that server bundle wasn't found. 
+It's normal. Just re-run this task.**
+
+To production build, use (assets will be served from `dist` folder):
+```
+yarn run build
+```
+
+To run server side, use:
+```
+yarn run start
+```
+(Note, this way isn't for production. 
+Better, you should use process manager, like `PM2`)
+
+Application will be available on http://localhost:3000/ 
+
+___
+
+Thank you for your time! ❤️
+ 
+If you have any questions, please send new pull requests or create issues.
